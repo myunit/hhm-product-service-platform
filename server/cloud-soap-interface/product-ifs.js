@@ -13,14 +13,14 @@ var ProductIFS = function (app) {
 util.inherits(ProductIFS, Object);
 exports = module.exports = ProductIFS;
 
-ProductIFS.prototype.getMyFavorite = function (obj, callback) {
+ProductIFS.prototype.getCategory = function (obj, callback) {
   var Product = this.DS.models.Product;
-  var xml = productObj.getMyFavoriteXML(obj);
-  Product.ItemForFavorite(xml, function (err, response) {
+  var xml = productObj.getCategoryXML(obj);
+  Product.GetCategoryTree(xml, function (err, response) {
     try {
-      callback(err, JSON.parse(response.ItemForFavoriteResult));
+      callback(err, JSON.parse(response.GetCategoryTreeResult));
     } catch (e) {
-      console.error('ProductIFS getMyFavorite Exception: ' + e);
+      console.error('ProductIFS getCategory Exception: ' + e);
       callback(err, {IsSuccess: false, ErrorDescription:'服务异常'});
     }
   });

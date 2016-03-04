@@ -5,22 +5,16 @@
  */
 var xml = require('xml');
 
-exports.getMyFavoriteXML = function (obj) {
+exports.getCategoryXML = function (obj) {
   var xmlObj = [{
-    ItemForFavorite: [
+    GetCategoryTree: [
       {
         _attr: {
           xmlns: 'http://tempuri.org/'
         }
       },
       {
-        uId: obj.userId
-      },
-      {
-        page: obj.pageId
-      },
-      {
-        pageSize: obj.pageSize
+        categorySysNo: obj.categoryId
       }
     ]
   }];
