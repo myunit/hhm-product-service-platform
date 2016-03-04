@@ -5,11 +5,13 @@
  */
 var loopback = require('loopback');
 var ProductIFS = require('../../server/cloud-soap-interface/product-ifs');
+var MKTIFS = require('../../server/cloud-soap-interface/mkt-ifs');
 
 module.exports = function (Product) {
   Product.getApp(function (err, app) {
 
     var productIFS = new ProductIFS(app);
+    var mktIFS = new MKTIFS(app);
 
     //获取商品分类
     Product.getCategory = function (data, cb) {
@@ -193,6 +195,44 @@ module.exports = function (Product) {
         ],
         returns: {arg: 'repData', type: 'string'},
         http: {path: '/get-new-product', verb: 'post'}
+      }
+    );
+
+    //获取秒杀商品
+    Product.getSecKillProduct = function (data, cb) {
+      mktIFS.getSecKillProduct(data, function (err, res) {
+        if (err) {
+          console.log('getSecKillProduct err: ' + err);
+          cb(null, {status: 0, msg: '操作异常'});
+          return;
+        }
+
+        if (!res.IsSuccess) {
+          console.error('getSecKillProduct result err: ' + res.ErrorInfo);
+          cb(null, {status: 0, msg: res.ErrorInfo});
+        } else {
+          var product = JSON.parse(res.ResultStr);
+          cb(null, {status: 1, count: product.length, product: product, msg: ''});
+        }
+      });
+    };
+
+    Product.remoteMethod(
+      'getSecKillProduct',
+      {
+        description: [
+          '获取秒杀商品.返回结果-status:操作结果 0 失败 1 成功, count:总数, product:商品信息, msg:附带信息'
+        ],
+        accepts: [
+          {
+            arg: 'data', type: 'object', required: true, http: {source: 'body'},
+            description: [
+              '获取秒杀商品 {"userId":int}'
+            ]
+          }
+        ],
+        returns: {arg: 'repData', type: 'string'},
+        http: {path: '/get-secKill-product', verb: 'post'}
       }
     );
 
