@@ -8,4 +8,9 @@ module.exports = function (app) {
     console.log('Product interface is connected');
     app.datasources.ProductSoap.createModel('Product', {});
   });
+
+  app.datasources.MKTSoap.once('connected', function () {
+    console.log('MKT interface is connected');
+    app.datasources.MKTSoap.createModel('MKT', {});
+  });
 };
