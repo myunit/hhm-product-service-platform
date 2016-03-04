@@ -51,3 +51,29 @@ ProductIFS.prototype.searchProduct = function (obj, callback) {
     }
   });
 };
+
+ProductIFS.prototype.getSalesProduct = function (obj, callback) {
+  var Product = this.DS.models.Product;
+  var xml = productObj.getSalesProductXML(obj);
+  Product.ItemForBargin(xml, function (err, response) {
+    try {
+      callback(err, JSON.parse(response.ItemForBarginResult));
+    } catch (e) {
+      console.error('ProductIFS getSalesProduct Exception: ' + e);
+      callback(err, {IsSuccess: false, ErrorDescription:'服务异常'});
+    }
+  });
+};
+
+ProductIFS.prototype.getNewProduct = function (obj, callback) {
+  var Product = this.DS.models.Product;
+  var xml = productObj.getNewProductXML(obj);
+  Product.ItemForList(xml, function (err, response) {
+    try {
+      callback(err, JSON.parse(response.ItemForListResult));
+    } catch (e) {
+      console.error('ProductIFS getNewProduct Exception: ' + e);
+      callback(err, {IsSuccess: false, ErrorDescription:'服务异常'});
+    }
+  });
+};

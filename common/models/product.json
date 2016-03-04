@@ -31,6 +31,24 @@
       "principalId": "$everyone",
       "permission": "ALLOW",
       "property": "searchProduct"
+    },
+    {
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "getSalesProduct"
+    },
+    {
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "getNewProduct"
+    },
+    {
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "getSecKillProduct"
     }
   ],
   "methods": {}

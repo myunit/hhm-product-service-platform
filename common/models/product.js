@@ -122,5 +122,79 @@ module.exports = function (Product) {
       }
     );
 
+    //获取特卖商品
+    Product.getSalesProduct = function (data, cb) {
+      productIFS.getSalesProduct(data, function (err, res) {
+        if (err) {
+          console.log('getSalesProduct err: ' + err);
+          cb(null, {status: 0, msg: '操作异常'});
+          return;
+        }
+
+        if (!res.IsSuccess) {
+          console.error('getSalesProduct result err: ' + res.ErrorDescription);
+          cb(null, {status: 0, msg: res.ErrorDescription});
+        } else {
+          cb(null, {status: 1, count: res.Counts, product: res.Datas, msg: ''});
+        }
+      });
+    };
+
+    Product.remoteMethod(
+      'getSalesProduct',
+      {
+        description: [
+          '获取特卖商品.返回结果-status:操作结果 0 失败 1 成功, count:总数, product:商品信息, msg:附带信息'
+        ],
+        accepts: [
+          {
+            arg: 'data', type: 'object', required: true, http: {source: 'body'},
+            description: [
+              '获取特卖商品 {"userId":int,"pageId":int,"pageSize":int}'
+            ]
+          }
+        ],
+        returns: {arg: 'repData', type: 'string'},
+        http: {path: '/get-sales-product', verb: 'post'}
+      }
+    );
+
+    //获取新品商品
+    Product.getNewProduct = function (data, cb) {
+      productIFS.getNewProduct(data, function (err, res) {
+        if (err) {
+          console.log('getNewProduct err: ' + err);
+          cb(null, {status: 0, msg: '操作异常'});
+          return;
+        }
+
+        if (!res.IsSuccess) {
+          console.error('getNewProduct result err: ' + res.ErrorDescription);
+          cb(null, {status: 0, msg: res.ErrorDescription});
+        } else {
+          cb(null, {status: 1, count: res.Counts, product: res.Datas, msg: ''});
+        }
+      });
+    };
+
+    Product.remoteMethod(
+      'getNewProduct',
+      {
+        description: [
+          '获取新品商品.返回结果-status:操作结果 0 失败 1 成功, count:总数, product:商品信息, msg:附带信息'
+        ],
+        accepts: [
+          {
+            arg: 'data', type: 'object', required: true, http: {source: 'body'},
+            description: [
+              '获取新品商品 {"userId":int,"pageId":int,"pageSize":int}'
+            ]
+          }
+        ],
+        returns: {arg: 'repData', type: 'string'},
+        http: {path: '/get-new-product', verb: 'post'}
+      }
+    );
+
   });
 };
