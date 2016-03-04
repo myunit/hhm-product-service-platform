@@ -85,5 +85,42 @@ module.exports = function (Product) {
       }
     );
 
+    //搜索商品
+    Product.searchProduct = function (data, cb) {
+      productIFS.searchProduct(data, function (err, res) {
+        if (err) {
+          console.log('searchProduct err: ' + err);
+          cb(null, {status: 0, msg: '操作异常'});
+          return;
+        }
+
+        if (!res.IsSuccess) {
+          console.error('searchProduct result err: ' + res.ErrorDescription);
+          cb(null, {status: 0, msg: res.ErrorDescription});
+        } else {
+          cb(null, {status: 1, count: res.Counts, product: res.Datas, msg: ''});
+        }
+      });
+    };
+
+    Product.remoteMethod(
+      'searchProduct',
+      {
+        description: [
+          '搜索商品.返回结果-status:操作结果 0 失败 1 成功, count:总数, product:商品信息, msg:附带信息'
+        ],
+        accepts: [
+          {
+            arg: 'data', type: 'object', required: true, http: {source: 'body'},
+            description: [
+              '搜索商品 {"userId":int,"key":"string","pageId":int,"pageSize":int}'
+            ]
+          }
+        ],
+        returns: {arg: 'repData', type: 'string'},
+        http: {path: '/search-product', verb: 'post'}
+      }
+    );
+
   });
 };

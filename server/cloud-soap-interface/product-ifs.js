@@ -38,3 +38,16 @@ ProductIFS.prototype.getCategoryProduct = function (obj, callback) {
     }
   });
 };
+
+ProductIFS.prototype.searchProduct = function (obj, callback) {
+  var Product = this.DS.models.Product;
+  var xml = productObj.searchProductXML(obj);
+  Product.ItemForSearch(xml, function (err, response) {
+    try {
+      callback(err, JSON.parse(response.ItemForSearchResult));
+    } catch (e) {
+      console.error('ProductIFS searchProduct Exception: ' + e);
+      callback(err, {IsSuccess: false, ErrorDescription:'服务异常'});
+    }
+  });
+};

@@ -47,3 +47,29 @@ exports.getCategoryProductXML = function (obj) {
 
   return xml(xmlObj, true);
 };
+
+exports.searchProductXML = function (obj) {
+  var xmlObj = [{
+    ItemForSearch: [
+      {
+        _attr: {
+          xmlns: 'http://tempuri.org/'
+        }
+      },
+      {
+        keyWord: obj.key
+      },
+      {
+        uId: obj.userId
+      },
+      {
+        page: obj.pageId
+      },
+      {
+        pageSize: obj.pageSize
+      }
+    ]
+  }];
+
+  return xml(xmlObj, true);
+};
