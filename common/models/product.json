@@ -19,6 +19,12 @@
       "principalId": "$everyone",
       "permission": "ALLOW",
       "property": "getCategory"
+    },
+    {
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "getCategoryProduct"
     }
   ],
   "methods": {}
