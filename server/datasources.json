@@ -1,0 +1,25 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "redisDS": {
+    "host": "127.0.0.1",
+    "port": 6379,
+    "database": "1",
+    "name": "redisDS",
+    "connector": "redis"
+  },
+  "ProductSoap": {
+    "url": "http://122.225.60.230:7008/PC_API/ItemService.svc",
+    "name": "ProductSoap",
+    "connector": "soap",
+    "wsdl": "http://122.225.60.230:7008/PC_API/ItemService.svc?WSDL"
+  },
+  "MKTSoap": {
+    "url": "http://122.225.60.230:7008/PC_API/MKTService.svc",
+    "name": "MTKSoap",
+    "connector": "soap",
+    "wsdl": "http://122.225.60.230:7008/PC_API/MKTService.svc?WSDL"
+  }
+}
