@@ -78,7 +78,8 @@ module.exports = function (Product) {
           {
             arg: 'data', type: 'object', required: true, http: {source: 'body'},
             description: [
-              '获取分类下的商品 {"userId":int,"categoryId":int,"pageId":int,"pageSize":int}'
+              '获取分类下的商品 {"userId":int,"CId":int,"ChildCId":int,"pageId":int,"pageSize":int}',
+              'CId:父类Id, ChildCId:子类Id'
             ]
           }
         ],
