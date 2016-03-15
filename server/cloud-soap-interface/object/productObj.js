@@ -24,9 +24,8 @@ exports.getCategoryXML = function (obj) {
 
 exports.getCategoryProductXML = function (obj) {
   var request = {};
-  request.FCId = obj.categoryId;
-  request.CId = obj.categoryId;
-  request.ChildCId = obj.categoryId;
+  request.CId = obj.CId;
+  request.ChildCId = obj.ChildCId;
   request.Page = obj.pageId;
   request.PageSize = obj.pageSize;
   request.priceFrom = -1;
