@@ -102,9 +102,6 @@ exports.getSalesProductXML = function (obj) {
 
 exports.getNewProductXML = function (obj) {
   var request = {};
-  request.FCId = 0;
-  request.CId = 0;
-  request.ChildCId = 0;
   request.Page = obj.pageId;
   request.PageSize = obj.pageSize;
   request.priceFrom = -1;
