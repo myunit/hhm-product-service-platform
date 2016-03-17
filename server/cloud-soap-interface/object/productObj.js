@@ -122,3 +122,23 @@ exports.getNewProductXML = function (obj) {
 
   return xml(xmlObj, true);
 };
+
+exports.getProductDetailXML = function (obj) {
+  var xmlObj = [{
+    ItemForDetails: [
+      {
+        _attr: {
+          xmlns: 'http://tempuri.org/'
+        }
+      },
+      {
+        uId: obj.userId
+      },
+      {
+        productSysNo: obj.productId
+      }
+    ]
+  }];
+
+  return xml(xmlObj, true);
+};

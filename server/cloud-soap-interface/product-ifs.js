@@ -77,3 +77,16 @@ ProductIFS.prototype.getNewProduct = function (obj, callback) {
     }
   });
 };
+
+ProductIFS.prototype.getProductDetail = function (obj, callback) {
+  var Product = this.DS.models.Product;
+  var xml = productObj.getProductDetailXML(obj);
+  Product.ItemForDetails(xml, function (err, response) {
+    try {
+      callback(err, JSON.parse(response.ItemForDetailsResult));
+    } catch (e) {
+      console.error('ProductIFS getProductDetail Exception: ' + e);
+      callback(err, {IsSuccess: false, ErrorDescription:'服务异常'});
+    }
+  });
+};
