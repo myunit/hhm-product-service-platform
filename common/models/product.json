@@ -49,6 +49,12 @@
       "principalId": "$everyone",
       "permission": "ALLOW",
       "property": "getSecKillProduct"
+    },
+    {
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "getProductDetail"
     }
   ],
   "methods": {}

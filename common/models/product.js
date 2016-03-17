@@ -254,5 +254,42 @@ module.exports = function (Product) {
       }
     );
 
+    //获取商品详情
+    Product.getProductDetail = function (data, cb) {
+      productIFS.getProductDetail(data, function (err, res) {
+        if (err) {
+          console.log('getProductDetail err: ' + err);
+          cb(null, {status: 0, msg: '操作异常'});
+          return;
+        }
+
+        if (!res.IsSuccess) {
+          console.error('getProductDetail result err: ' + res.ErrorDescription);
+          cb(null, {status: 0, msg: res.ErrorDescription});
+        } else {
+          cb(null, {status: 1, product: res.ItemData, msg: ''});
+        }
+      });
+    };
+
+    Product.remoteMethod(
+      'getProductDetail',
+      {
+        description: [
+          '获取商品详情.返回结果-status:操作结果 0 失败 1 成功, product:商品信息, msg:附带信息'
+        ],
+        accepts: [
+          {
+            arg: 'data', type: 'object', required: true, http: {source: 'body'},
+            description: [
+              '获取秒杀商品 {"userId":int,"productId":int}'
+            ]
+          }
+        ],
+        returns: {arg: 'repData', type: 'string'},
+        http: {path: '/get-product-detail', verb: 'post'}
+      }
+    );
+
   });
 };
