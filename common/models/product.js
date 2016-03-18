@@ -282,7 +282,7 @@ module.exports = function (Product) {
           {
             arg: 'data', type: 'object', required: true, http: {source: 'body'},
             description: [
-              '获取秒杀商品 {"userId":int,"productId":int}'
+              '获取商品详情 {"userId":int,"productId":int}'
             ]
           }
         ],
