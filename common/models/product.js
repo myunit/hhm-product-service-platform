@@ -267,7 +267,22 @@ module.exports = function (Product) {
           console.error('getProductDetail result err: ' + res.ErrorDescription);
           cb(null, {status: 0, msg: res.ErrorDescription});
         } else {
-          cb(null, {status: 1, product: res.ItemData, msg: ''});
+          var product = res.ItemData;
+          if (product.Skus.length > 1) {
+            var max = product.Skus[0].Price, min = max;
+            product.Skus.forEach(function (sItem, sIndex) {
+              if (sItem.Price > max) {
+                max = sItem.Price;
+              }
+
+              if (sItem.Price < min) {
+                min = sItem.Price;
+              }
+            });
+            product.MaxPrice = max;
+            product.MinPrice = min;
+          }
+          cb(null, {status: 1, product: product, msg: ''});
         }
       });
     };
