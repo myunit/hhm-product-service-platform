@@ -90,3 +90,16 @@ ProductIFS.prototype.getProductDetail = function (obj, callback) {
     }
   });
 };
+
+ProductIFS.prototype.getRecommendProduct = function (obj, callback) {
+  var Product = this.DS.models.Product;
+  var xml = productObj.getRecommendProductXML(obj);
+  Product.GetAllColumnsRecommend(xml, function (err, response) {
+    try {
+      callback(err, JSON.parse(response.GetAllColumnsRecommendResult));
+    } catch (e) {
+      console.error('ProductIFS getRecommendProduct Exception: ' + e);
+      callback(err, {IsSuccess: false, ErrorDescription:'服务异常'});
+    }
+  });
+};

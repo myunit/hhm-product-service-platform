@@ -6,6 +6,7 @@
 var loopback = require('loopback');
 var ProductIFS = require('../../server/cloud-soap-interface/product-ifs');
 var MKTIFS = require('../../server/cloud-soap-interface/mkt-ifs');
+var homeConfig = require('../../server/home-config');
 
 module.exports = function (Product) {
   Product.getApp(function (err, app) {
@@ -254,6 +255,45 @@ module.exports = function (Product) {
       }
     );
 
+    //获取推荐类目
+    Product.getRecommendProduct = function (data, cb) {
+      productIFS.getRecommendProduct(data, function (err, res) {
+        if (err) {
+          console.log('getRecommendProduct err: ' + err);
+          cb(null, {status: 0, msg: '操作异常'});
+          return;
+        }
+
+        if (!res.IsSuccess) {
+          console.error('getRecommendProduct result err: ' + res.ErrorInfo);
+          cb(null, {status: 0, msg: res.ErrorInfo});
+        } else {
+          var result = JSON.parse(res.ResultStr);
+          cb(null, {status: 1, count: result.total, recommend: result.rows, msg: ''});
+        }
+      });
+    };
+
+    Product.remoteMethod(
+      'getRecommendProduct',
+      {
+        description: [
+          '获取推荐类目.返回结果-status:操作结果 0 失败 1 成功, count:总数, recommend:推荐信息, msg:附带信息'
+        ],
+        accepts: [
+          {
+            arg: 'data', type: 'object', required: true, http: {source: 'body'},
+            description: [
+              '获取推荐类目 {"userId":int, "pageId":int, "pageSize":int, "recommendId":int}',
+              'recommendId:推荐类目id, 0全部'
+            ]
+          }
+        ],
+        returns: {arg: 'repData', type: 'string'},
+        http: {path: '/get-recommend-product', verb: 'post'}
+      }
+    );
+
     //获取商品详情
     Product.getProductDetail = function (data, cb) {
       productIFS.getProductDetail(data, function (err, res) {
@@ -303,6 +343,60 @@ module.exports = function (Product) {
         ],
         returns: {arg: 'repData', type: 'string'},
         http: {path: '/get-product-detail', verb: 'post'}
+      }
+    );
+
+    //获取首页配置信息
+    Product.getHomeConfig = function (data, cb) {
+      if (!data.project) {
+        cb(null, {status: 0, msg: '参数错误'});
+        return;
+      }
+
+      var home = homeConfig[data.project];
+      if (home === undefined) {
+        cb(null, {status: 0, msg: '配置不存在'});
+      } else {
+        productIFS.getRecommendProduct({
+          userId: data.userId,
+          pageId: 0,
+          pageSize: 100,
+          recommendId: 0
+        }, function (err, res) {
+          if (err) {
+            console.log('getRecommendProduct err: ' + err);
+            cb(null, {status: 0, msg: '操作异常'});
+            return;
+          }
+
+          if (!res.IsSuccess) {
+            console.error('getRecommendProduct result err: ' + res.ErrorInfo);
+            cb(null, {status: 0, msg: res.ErrorInfo});
+          } else {
+            var result = JSON.parse(res.ResultStr);
+            home.recommend = result.rows;
+            cb(null, {status: 1, home: home, msg: ''});
+          }
+        });
+      }
+
+    };
+
+    Product.remoteMethod(
+      'getHomeConfig',
+      {
+        description: ['获取首页配置信息.返回结果-status:操作结果 0 成功 -1 失败, home:首页信息, msg:附带信息'],
+        accepts: [
+          {
+            arg: 'data', type: 'object', required: true, http: {source: 'body'},
+            description: [
+              '获取首页配置信息 {"userId":int, "project":"string"}',
+              'project:项目名, 好好卖是hhm'
+            ]
+          }
+        ],
+        returns: {arg: 'repData', type: 'string'},
+        http: {path: '/get-home-config', verb: 'post'}
       }
     );
 
