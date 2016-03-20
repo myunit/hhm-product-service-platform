@@ -91,12 +91,25 @@ ProductIFS.prototype.getProductDetail = function (obj, callback) {
   });
 };
 
-ProductIFS.prototype.getRecommendProduct = function (obj, callback) {
+ProductIFS.prototype.getRecommend = function (obj, callback) {
   var Product = this.DS.models.Product;
-  var xml = productObj.getRecommendProductXML(obj);
+  var xml = productObj.getRecommendXML(obj);
   Product.GetAllColumnsRecommend(xml, function (err, response) {
     try {
       callback(err, JSON.parse(response.GetAllColumnsRecommendResult));
+    } catch (e) {
+      console.error('ProductIFS getRecommendProduct Exception: ' + e);
+      callback(err, {IsSuccess: false, ErrorDescription:'服务异常'});
+    }
+  });
+};
+
+ProductIFS.prototype.getRecommendProduct = function (obj, callback) {
+  var Product = this.DS.models.Product;
+  var xml = productObj.getRecommendProductXML(obj);
+  Product.GetColumnsRecommendBySysNo(xml, function (err, response) {
+    try {
+      callback(err, JSON.parse(response.GetColumnsRecommendBySysNoResult));
     } catch (e) {
       console.error('ProductIFS getRecommendProduct Exception: ' + e);
       callback(err, {IsSuccess: false, ErrorDescription:'服务异常'});

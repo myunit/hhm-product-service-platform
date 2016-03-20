@@ -256,32 +256,32 @@ module.exports = function (Product) {
     );
 
     //获取推荐类目
-    Product.getRecommendProduct = function (data, cb) {
-      productIFS.getRecommendProduct(data, function (err, res) {
+    Product.getRecommend = function (data, cb) {
+      productIFS.getRecommend(data, function (err, res) {
         if (err) {
-          console.log('getRecommendProduct err: ' + err);
+          console.log('getRecommend err: ' + err);
           cb(null, {status: 0, msg: '操作异常'});
           return;
         }
 
         if (!res.IsSuccess) {
-          console.error('getRecommendProduct result err: ' + res.ErrorInfo);
+          console.error('getRecommend result err: ' + res.ErrorInfo);
           cb(null, {status: 0, msg: res.ErrorInfo});
         } else {
-          var result = JSON.parse(res.ResultStr);
-          var recommend = result.rows;
+          var recommend = JSON.parse(res.ResultStr);
           recommend.forEach(function (item, index) {
             if (item.RecommendItems.length > 6) {
               item.RecommendItems.splice(6, item.RecommendItems.length-6);
             }
+            item.type = 5;
           });
-          cb(null, {status: 1, count: result.total, recommend: recommend, msg: ''});
+          cb(null, {status: 1, recommend: recommend, msg: ''});
         }
       });
     };
 
     Product.remoteMethod(
-      'getRecommendProduct',
+      'getRecommend',
       {
         description: [
           '获取推荐类目.返回结果-status:操作结果 0 失败 1 成功, count:总数, recommend:推荐信息, msg:附带信息'
@@ -290,13 +290,13 @@ module.exports = function (Product) {
           {
             arg: 'data', type: 'object', required: true, http: {source: 'body'},
             description: [
-              '获取推荐类目 {"userId":int, "pageId":int, "pageSize":int, "recommendId":int}',
+              '获取推荐类目 {"userId":int, "recommendId":int}',
               'recommendId:推荐类目id, 0全部'
             ]
           }
         ],
         returns: {arg: 'repData', type: 'string'},
-        http: {path: '/get-recommend-product', verb: 'post'}
+        http: {path: '/get-recommend', verb: 'post'}
       }
     );
 
@@ -363,10 +363,8 @@ module.exports = function (Product) {
       if (home === undefined) {
         cb(null, {status: 0, msg: '配置不存在'});
       } else {
-        productIFS.getRecommendProduct({
+        productIFS.getRecommend({
           userId: data.userId,
-          pageId: 0,
-          pageSize: 100,
           recommendId: 0
         }, function (err, res) {
           if (err) {
@@ -379,12 +377,13 @@ module.exports = function (Product) {
             console.error('getRecommendProduct result err: ' + res.ErrorInfo);
             cb(null, {status: 0, msg: res.ErrorInfo});
           } else {
-            var result = JSON.parse(res.ResultStr);
-            home.recommend = result.rows;
+            var recommend = JSON.parse(res.ResultStr);
+            home.recommend = recommend;
             home.recommend.forEach(function (item, index) {
               if (item.RecommendItems.length > 6) {
                 item.RecommendItems.splice(6, item.RecommendItems.length-6);
               }
+              item.type = 5;
             });
             cb(null, {status: 1, home: home, msg: ''});
           }
@@ -408,6 +407,45 @@ module.exports = function (Product) {
         ],
         returns: {arg: 'repData', type: 'string'},
         http: {path: '/get-home-config', verb: 'post'}
+      }
+    );
+
+    //获取推荐类目下商品
+    Product.getRecommendProduct = function (data, cb) {
+      productIFS.getRecommendProduct(data, function (err, res) {
+        if (err) {
+          console.log('getRecommendProduct err: ' + err);
+          cb(null, {status: 0, msg: '操作异常'});
+          return;
+        }
+
+        if (!res.IsSuccess) {
+          console.error('getRecommendProduct result err: ' + res.ErrorInfo);
+          cb(null, {status: 0, msg: res.ErrorInfo});
+        } else {
+          var result = JSON.parse(res.ResultStr);
+          cb(null, {status: 1, count: result.Total, product: result.ItemDescription, msg: ''});
+        }
+      });
+    };
+
+    Product.remoteMethod(
+      'getRecommendProduct',
+      {
+        description: [
+          '获取推荐类目下商品.返回结果-status:操作结果 0 失败 1 成功, count:总数, product:商品信息, msg:附带信息'
+        ],
+        accepts: [
+          {
+            arg: 'data', type: 'object', required: true, http: {source: 'body'},
+            description: [
+              '获取推荐类目下商品 {"userId":int, "recommendId":int,"pageId":int, "pageSize":int}',
+              'recommendId:推荐类目id, 0全部'
+            ]
+          }
+        ],
+        returns: {arg: 'repData', type: 'string'},
+        http: {path: '/get-recommend-product', verb: 'post'}
       }
     );
 

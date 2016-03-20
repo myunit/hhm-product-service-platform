@@ -143,9 +143,35 @@ exports.getProductDetailXML = function (obj) {
   return xml(xmlObj, true);
 };
 
-exports.getRecommendProductXML = function (obj) {
+exports.getRecommendXML = function (obj) {
   var xmlObj = [{
     GetAllColumnsRecommend: [
+      {
+        _attr: {
+          xmlns: 'http://tempuri.org/'
+        }
+      },
+      {
+        uId: obj.userId
+      },
+      {
+        recId: obj.recommendId
+      },
+      {
+        recName: ''
+      },
+      {
+        recStatus: 2
+      }
+    ]
+  }];
+
+  return xml(xmlObj, true);
+};
+
+exports.getRecommendProductXML = function (obj) {
+  var xmlObj = [{
+    GetColumnsRecommendBySysNo: [
       {
         _attr: {
           xmlns: 'http://tempuri.org/'
@@ -162,12 +188,6 @@ exports.getRecommendProductXML = function (obj) {
       },
       {
         recId: obj.recommendId
-      },
-      {
-        recName: ''
-      },
-      {
-        recStatus: 2
       }
     ]
   }];
