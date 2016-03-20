@@ -269,7 +269,13 @@ module.exports = function (Product) {
           cb(null, {status: 0, msg: res.ErrorInfo});
         } else {
           var result = JSON.parse(res.ResultStr);
-          cb(null, {status: 1, count: result.total, recommend: result.rows, msg: ''});
+          var recommend = result.rows;
+          recommend.forEach(function (item, index) {
+            if (item.RecommendItems.length > 6) {
+              item.RecommendItems.splice(6, item.RecommendItems.length-6);
+            }
+          });
+          cb(null, {status: 1, count: result.total, recommend: recommend, msg: ''});
         }
       });
     };
@@ -375,6 +381,11 @@ module.exports = function (Product) {
           } else {
             var result = JSON.parse(res.ResultStr);
             home.recommend = result.rows;
+            home.recommend.forEach(function (item, index) {
+              if (item.RecommendItems.length > 6) {
+                item.RecommendItems.splice(6, item.RecommendItems.length-6);
+              }
+            });
             cb(null, {status: 1, home: home, msg: ''});
           }
         });
