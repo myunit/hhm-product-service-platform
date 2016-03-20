@@ -142,3 +142,35 @@ exports.getProductDetailXML = function (obj) {
 
   return xml(xmlObj, true);
 };
+
+exports.getRecommendProductXML = function (obj) {
+  var xmlObj = [{
+    GetAllColumnsRecommend: [
+      {
+        _attr: {
+          xmlns: 'http://tempuri.org/'
+        }
+      },
+      {
+        uId: obj.userId
+      },
+      {
+        currentPage: obj.pageId
+      },
+      {
+        pageSize: obj.pageSize
+      },
+      {
+        recId: obj.recommendId
+      },
+      {
+        recName: ''
+      },
+      {
+        recStatus: 2
+      }
+    ]
+  }];
+
+  return xml(xmlObj, true);
+};
