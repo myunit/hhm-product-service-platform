@@ -68,7 +68,7 @@
       "principalType": "ROLE",
       "principalId": "$authenticated",
       "permission": "ALLOW",
-      "property": "getRecommendProduct"
+      "property": "getRecommend"
     }
   ],
   "methods": {}

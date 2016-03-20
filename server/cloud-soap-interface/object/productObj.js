@@ -143,7 +143,7 @@ exports.getProductDetailXML = function (obj) {
   return xml(xmlObj, true);
 };
 
-exports.getRecommendProductXML = function (obj) {
+exports.getRecommendXML = function (obj) {
   var xmlObj = [{
     GetAllColumnsRecommend: [
       {
@@ -153,12 +153,6 @@ exports.getRecommendProductXML = function (obj) {
       },
       {
         uId: obj.userId
-      },
-      {
-        currentPage: obj.pageId
-      },
-      {
-        pageSize: obj.pageSize
       },
       {
         recId: obj.recommendId
