@@ -168,3 +168,29 @@ exports.getRecommendXML = function (obj) {
 
   return xml(xmlObj, true);
 };
+
+exports.getRecommendProductXML = function (obj) {
+  var xmlObj = [{
+    GetColumnsRecommendBySysNo: [
+      {
+        _attr: {
+          xmlns: 'http://tempuri.org/'
+        }
+      },
+      {
+        uId: obj.userId
+      },
+      {
+        currentPage: obj.pageId
+      },
+      {
+        pageSize: obj.pageSize
+      },
+      {
+        recId: obj.recommendId
+      }
+    ]
+  }];
+
+  return xml(xmlObj, true);
+};

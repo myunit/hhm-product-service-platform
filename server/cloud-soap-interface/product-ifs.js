@@ -103,3 +103,16 @@ ProductIFS.prototype.getRecommend = function (obj, callback) {
     }
   });
 };
+
+ProductIFS.prototype.getRecommendProduct = function (obj, callback) {
+  var Product = this.DS.models.Product;
+  var xml = productObj.getRecommendProductXML(obj);
+  Product.GetColumnsRecommendBySysNo(xml, function (err, response) {
+    try {
+      callback(err, JSON.parse(response.GetColumnsRecommendBySysNoResult));
+    } catch (e) {
+      console.error('ProductIFS getRecommendProduct Exception: ' + e);
+      callback(err, {IsSuccess: false, ErrorDescription:'服务异常'});
+    }
+  });
+};
