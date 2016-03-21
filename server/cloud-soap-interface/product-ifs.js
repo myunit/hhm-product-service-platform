@@ -129,3 +129,16 @@ ProductIFS.prototype.getGroupProduct = function (obj, callback) {
     }
   });
 };
+
+ProductIFS.prototype.getCombinationSingle = function (obj, callback) {
+  var Product = this.DS.models.Product;
+  var xml = productObj.getCombinationSingleXML(obj);
+  Product.GetSkusByCombinationSkuSysNo(xml, function (err, response) {
+    try {
+      callback(err, JSON.parse(response.GetSkusByCombinationSkuSysNoResult));
+    } catch (e) {
+      console.error('ProductIFS getCombinationSingle Exception: ' + e);
+      callback(err, {IsSuccess: false, ErrorDescription:'服务异常'});
+    }
+  });
+};

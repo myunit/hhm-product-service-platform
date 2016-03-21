@@ -220,3 +220,20 @@ exports.getGroupProductXML = function (obj) {
 
   return xml(xmlObj, true);
 };
+
+exports.getCombinationSingleXML = function (obj) {
+  var xmlObj = [{
+    GetSkusByCombinationSkuSysNo: [
+      {
+        _attr: {
+          xmlns: 'http://tempuri.org/'
+        }
+      },
+      {
+        skuSysNo: obj.skuId
+      }
+    ]
+  }];
+
+  return xml(xmlObj, true);
+};

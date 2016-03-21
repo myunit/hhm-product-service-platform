@@ -4,6 +4,7 @@
  * @description
  */
 var loopback = require('loopback');
+var async = require('async');
 var ProductIFS = require('../../server/cloud-soap-interface/product-ifs');
 var MKTIFS = require('../../server/cloud-soap-interface/mkt-ifs');
 var homeConfig = require('../../server/home-config');
@@ -538,6 +539,81 @@ module.exports = function (Product) {
         ],
         returns: {arg: 'repData', type: 'string'},
         http: {path: '/get-group-product', verb: 'post'}
+      }
+    );
+
+    //获取组合商品详情
+    Product.getGroupProductDetail = function (data, groupCb) {
+      async.waterfall(
+        [
+          function (cb) {
+            productIFS.getProductDetail(data, function (err, res) {
+              if (err) {
+                console.log('getProductDetail err: ' + err);
+                cb({status: 0, msg: '操作异常'});
+                return;
+              }
+
+              if (!res.IsSuccess) {
+                console.error('getProductDetail result err: ' + res.ErrorDescription);
+                cb({status: 0, msg: res.ErrorDescription});
+              } else {
+                cb(null, {product: res.ItemData});
+              }
+            });
+          },
+          function (data, cb) {
+            var product = data.product;
+            if (product.Skus.length === 0) {
+              cb({status: 9, msg: '该组合下不存在单品'});
+              return;
+            }
+            var sku = {};
+            sku.skuId = product.Skus[0].SysNo;
+
+            productIFS.getCombinationSingle(sku, function (err, res) {
+              if (err) {
+                console.error('getCombinationSingle err: ' + err);
+                cb({status:0, msg: '操作异常'});
+                return;
+              }
+
+              if (!res.IsSuccess) {
+                console.error('getCombinationSingle result err: ' + res.ErrorInfo);
+                cb({status:0, msg: res.ErrorInfo});
+              } else {
+                product.single = JSON.parse(res.ResultStr);
+                cb(null, {status: 1, product:product, msg: ''});
+              }
+            });
+          }
+        ],
+        function (err, msg) {
+          if (err) {
+            groupCb(null, err);
+          } else {
+            groupCb(null, msg);
+          }
+        }
+      );
+    };
+
+    Product.remoteMethod(
+      'getGroupProductDetail',
+      {
+        description: [
+          '获取组合商品详情.返回结果-status:操作结果 0 失败 1 成功, product:商品信息, msg:附带信息'
+        ],
+        accepts: [
+          {
+            arg: 'data', type: 'object', required: true, http: {source: 'body'},
+            description: [
+              '获取组合商品详情 {"userId":int, "productId":int}'
+            ]
+          }
+        ],
+        returns: {arg: 'repData', type: 'string'},
+        http: {path: '/get-group-product-detail', verb: 'post'}
       }
     );
 
