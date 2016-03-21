@@ -89,6 +89,13 @@
       "principalId": "$authenticated",
       "permission": "ALLOW",
       "property": "getGroupProduct"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "getGroupProductDetail"
     }
   ],
   "methods": {}
