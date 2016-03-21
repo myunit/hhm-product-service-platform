@@ -25,3 +25,16 @@ MKTIFS.prototype.getSecKillProduct = function (obj, callback) {
     }
   });
 };
+
+MKTIFS.prototype.getSecKillProductDetail = function (obj, callback) {
+  var MKT = this.DS.models.MKT;
+  var xml = mktObj.getSecKillProductDetailXML(obj);
+  MKT.GetSecKillBySysNo(xml, function (err, response) {
+    try {
+      callback(err, JSON.parse(response.GetSecKillBySysNoResult));
+    } catch (e) {
+      console.error('MKTIFS getSecKillProductDetail Exception: ' + e);
+      callback(err, {IsSuccess: false, ErrorDescription:'服务异常'});
+    }
+  });
+};

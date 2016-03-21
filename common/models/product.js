@@ -255,6 +255,44 @@ module.exports = function (Product) {
       }
     );
 
+    //获取秒杀商品详情
+    Product.getSecKillProductDetail = function (data, cb) {
+      mktIFS.getSecKillProductDetail(data, function (err, res) {
+        if (err) {
+          console.log('getSecKillProductDetail err: ' + err);
+          cb(null, {status: 0, msg: '操作异常'});
+          return;
+        }
+
+        if (!res.IsSuccess) {
+          console.error('getSecKillProductDetail result err: ' + res.ErrorInfo);
+          cb(null, {status: 0, msg: res.ErrorInfo});
+        } else {
+          var product = JSON.parse(res.ResultStr);
+          cb(null, {status: 1, product: product, msg: ''});
+        }
+      });
+    };
+
+    Product.remoteMethod(
+      'getSecKillProductDetail',
+      {
+        description: [
+          '获取秒杀商品详情.返回结果-status:操作结果 0 失败 1 成功, product:商品信息, msg:附带信息'
+        ],
+        accepts: [
+          {
+            arg: 'data', type: 'object', required: true, http: {source: 'body'},
+            description: [
+              '获取秒杀商品详情 {"userId":int, "productId":int}'
+            ]
+          }
+        ],
+        returns: {arg: 'repData', type: 'string'},
+        http: {path: '/get-secKill-product-detail', verb: 'post'}
+      }
+    );
+
     //获取推荐类目
     Product.getRecommend = function (data, cb) {
       productIFS.getRecommend(data, function (err, res) {

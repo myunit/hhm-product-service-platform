@@ -33,3 +33,23 @@ exports.getSecKillProductXML = function (obj) {
 
   return xml(xmlObj, true);
 };
+
+exports.getSecKillProductDetailXML = function (obj) {
+  var xmlObj = [{
+    GetSecKillBySysNo: [
+      {
+        _attr: {
+          xmlns: 'http://tempuri.org/'
+        }
+      },
+      {
+        customerSysNo: obj.userId
+      },
+      {
+        seckillSysNo: obj.productId
+      }
+    ]
+  }];
+
+  return xml(xmlObj, true);
+};
