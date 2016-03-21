@@ -116,3 +116,16 @@ ProductIFS.prototype.getRecommendProduct = function (obj, callback) {
     }
   });
 };
+
+ProductIFS.prototype.getGroupProduct = function (obj, callback) {
+  var Product = this.DS.models.Product;
+  var xml = productObj.getGroupProductXML(obj);
+  Product.ItemForList(xml, function (err, response) {
+    try {
+      callback(err, JSON.parse(response.ItemForListResult));
+    } catch (e) {
+      console.error('ProductIFS getCategoryProduct Exception: ' + e);
+      callback(err, {IsSuccess: false, ErrorDescription:'服务异常'});
+    }
+  });
+};

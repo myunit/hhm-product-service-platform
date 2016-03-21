@@ -487,5 +487,59 @@ module.exports = function (Product) {
       }
     );
 
+    //获取组合商品
+    Product.getGroupProduct = function (data, cb) {
+      productIFS.getGroupProduct(data, function (err, res) {
+        if (err) {
+          console.log('getGroupProduct err: ' + err);
+          cb(null, {status: 0, msg: '操作异常'});
+          return;
+        }
+
+        if (!res.IsSuccess) {
+          console.error('getGroupProduct result err: ' + res.ErrorDescription);
+          cb(null, {status: 0, msg: res.ErrorDescription});
+        } else {
+          var product = res.Datas;
+          product.forEach(function (item, index) {
+            if (item.SkuList.length > 1) {
+              var max = item.SkuList[0].Price, min = max;
+              item.SkuList.forEach(function (sItem, sIndex) {
+                if (sItem.Price > max) {
+                  max = sItem.Price;
+                }
+
+                if (sItem.Price < min) {
+                  min = sItem.Price;
+                }
+              });
+              item.MaxPrice = max;
+              item.MinPrice = min;
+            }
+          });
+          cb(null, {status: 1, count: res.Counts, product: product, msg: ''});
+        }
+      });
+    };
+
+    Product.remoteMethod(
+      'getGroupProduct',
+      {
+        description: [
+          '获取组合商品.返回结果-status:操作结果 0 失败 1 成功, count:总数, product:商品信息, msg:附带信息'
+        ],
+        accepts: [
+          {
+            arg: 'data', type: 'object', required: true, http: {source: 'body'},
+            description: [
+              '获取组合商品 {"userId":int,"pageId":int,"pageSize":int}'
+            ]
+          }
+        ],
+        returns: {arg: 'repData', type: 'string'},
+        http: {path: '/get-group-product', verb: 'post'}
+      }
+    );
+
   });
 };

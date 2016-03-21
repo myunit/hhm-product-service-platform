@@ -194,3 +194,29 @@ exports.getRecommendProductXML = function (obj) {
 
   return xml(xmlObj, true);
 };
+
+exports.getGroupProductXML = function (obj) {
+  var request = {};
+  request.CId = 0;
+  request.ChildCId = 0;
+  request.Page = obj.pageId;
+  request.PageSize = obj.pageSize;
+  request.priceFrom = -1;
+  request.priceTo = -1;
+  request.UId = obj.userId;
+  request.isCombineProduct = true;
+  var xmlObj = [{
+    ItemForList: [
+      {
+        _attr: {
+          xmlns: 'http://tempuri.org/'
+        }
+      },
+      {
+        request: JSON.stringify(request)
+      }
+    ]
+  }];
+
+  return xml(xmlObj, true);
+};
