@@ -21,25 +21,25 @@
       }
     ],
     "news": {
-      "img": "http:////img.alicdn.com/tps/i3/TB11xG3KVXXXXXnXFXX5qTAJFXX-92-92.jpg",
+      "img": "http://haohaomai.oss-cn-hangzhou.aliyuncs.com/indexpics/img_xinpin%403x.png",
       "url": "",
       "type": 2,
       "code": 0
     },
     "sales": {
-      "img": "http://img.alicdn.com/tps/i4/TB1KSmbKFXXXXb2XXXX5qTAJFXX-92-92.jpg",
+      "img": "http://haohaomai.oss-cn-hangzhou.aliyuncs.com/indexpics/img_zuhe%403x.png",
       "url": "",
       "type": 3,
       "code": 0
     },
     "group": {
-      "img": "http://img.alicdn.com/tps/i4/TB1RhgiLVXXXXctaXXXOyPdGpXX-140-140.jpg",
+      "img": "http://haohaomai.oss-cn-hangzhou.aliyuncs.com/indexpics/img_temai%403x.png",
       "url": "",
       "type": 1,
       "code": 0
     },
     "secKill": {
-      "img": "http://img.alicdn.com/tps/i2/TB1vYhhMXXXXXcAXXXXOyPdGpXX-140-140.jpg",
+      "img": "http://haohaomai.oss-cn-hangzhou.aliyuncs.com/indexpics/img_miaosha%403x.png",
       "url": "",
       "type": 0,
       "code": 0
