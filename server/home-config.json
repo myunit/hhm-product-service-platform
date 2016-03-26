@@ -3,19 +3,25 @@
     "banner":[
       {
         "img": "http://img.alicdn.com/tps/i1/TB1M8ZOLVXXXXX8XpXXX3a8GpXX-700-500.jpg",
-        "url": "",
+        "url": "http://wxp.xitie10.com/product/news",
         "type": 5,
         "code": 0
       },
       {
         "img": "http://img.alicdn.com/tps/i1/TB11.gILVXXXXaQXpXXP3C8GpXX-700-500.png",
-        "url": "",
+        "url": "http://wxp.xitie10.com/product/secKill",
         "type": 5,
         "code": 0
       },
       {
         "img": "http://img.alicdn.com/tps/i1/TB1S3oNLVXXXXXSXpXXX3a8GpXX-700-500.jpg",
-        "url": "",
+        "url": "http://wxp.xitie10.com/product/group",
+        "type": 5,
+        "code": 0
+      },
+      {
+        "img": "http://img.alicdn.com/tps/i1/TB1S3oNLVXXXXXSXpXXX3a8GpXX-700-500.jpg",
+        "url": "http://wxp.xitie10.com/product/recommend?id=14&name=0323栏目一",
         "type": 5,
         "code": 0
       }
