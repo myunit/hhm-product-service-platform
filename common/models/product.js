@@ -257,22 +257,46 @@ module.exports = function (Product) {
     );
 
     //获取秒杀商品详情
-    Product.getSecKillProductDetail = function (data, cb) {
-      mktIFS.getSecKillProductDetail(data, function (err, res) {
-        if (err) {
-          console.log('getSecKillProductDetail err: ' + err);
-          cb(null, {status: 0, msg: '操作异常'});
-          return;
-        }
+    Product.getSecKillProductDetail = function (data, callback) {
+      async.waterfall(
+        [
+          function (cb) {
+            mktIFS.getSecKillProductDetail(data, function (err, res) {
+              if (err) {
+                console.log('getSecKillProductDetail err: ' + err);
+                cb({status: 0, msg: '操作异常'});
+                return;
+              }
 
-        if (!res.IsSuccess) {
-          console.error('getSecKillProductDetail result err: ' + res.ErrorInfo);
-          cb(null, {status: 0, msg: res.ErrorInfo});
-        } else {
-          var product = JSON.parse(res.ResultStr);
-          cb(null, {status: 1, product: product, msg: ''});
+              if (!res.IsSuccess) {
+                console.error('getSecKillProductDetail result err: ' + res.ErrorInfo);
+                cb({status: 0, msg: res.ErrorInfo});
+              } else {
+                cb(null, JSON.parse(res.ResultStr));
+              }
+            });
+          },
+          function (product, cb) {
+            productIFS.isFavoriteProduct(data, function (err, res) {
+              if (err) {
+                console.error('isFavoriteProduct err: ' + err);
+                cb({status:0, msg: '操作异常'});
+                return;
+              }
+
+              product.isLike = res;
+              cb(null, {status: 1, product:product, msg: ''});
+            });
+          }
+        ],
+        function (err, msg) {
+          if (err) {
+            callback(null, err);
+          } else {
+            callback(null, msg);
+          }
         }
-      });
+      );
     };
 
     Product.remoteMethod(
@@ -340,36 +364,61 @@ module.exports = function (Product) {
     );
 
     //获取商品详情
-    Product.getProductDetail = function (data, cb) {
-      productIFS.getProductDetail(data, function (err, res) {
-        if (err) {
-          console.log('getProductDetail err: ' + err);
-          cb(null, {status: 0, msg: '操作异常'});
-          return;
-        }
-
-        if (!res.IsSuccess) {
-          console.error('getProductDetail result err: ' + res.ErrorDescription);
-          cb(null, {status: 0, msg: res.ErrorDescription});
-        } else {
-          var product = res.ItemData;
-          if (product.Skus.length > 1) {
-            var max = product.Skus[0].Price, min = max;
-            product.Skus.forEach(function (sItem, sIndex) {
-              if (sItem.Price > max) {
-                max = sItem.Price;
+    Product.getProductDetail = function (data, callback) {
+      async.waterfall(
+        [
+          function (cb) {
+            productIFS.getProductDetail(data, function (err, res) {
+              if (err) {
+                console.log('getProductDetail err: ' + err);
+                cb({status: 0, msg: '操作异常'});
+                return;
               }
 
-              if (sItem.Price < min) {
-                min = sItem.Price;
+              if (!res.IsSuccess) {
+                console.error('getProductDetail result err: ' + res.ErrorDescription);
+                cb({status: 0, msg: res.ErrorDescription});
+              } else {
+                var product = res.ItemData;
+                if (product.Skus.length > 1) {
+                  var max = product.Skus[0].Price, min = max;
+                  product.Skus.forEach(function (sItem, sIndex) {
+                    if (sItem.Price > max) {
+                      max = sItem.Price;
+                    }
+
+                    if (sItem.Price < min) {
+                      min = sItem.Price;
+                    }
+                  });
+                  product.MaxPrice = max;
+                  product.MinPrice = min;
+                }
+                cb(null, product);
               }
             });
-            product.MaxPrice = max;
-            product.MinPrice = min;
+          },
+          function (product, cb) {
+            productIFS.isFavoriteProduct(data, function (err, res) {
+              if (err) {
+                console.error('isFavoriteProduct err: ' + err);
+                cb({status:0, msg: '操作异常'});
+                return;
+              }
+
+              product.isLike = res;
+              cb(null, {status: 1, product:product, msg: ''});
+            });
           }
-          cb(null, {status: 1, product: product, msg: ''});
+        ],
+        function (err, msg) {
+          if (err) {
+            callback(null, err);
+          } else {
+            callback(null, msg);
+          }
         }
-      });
+      );
     };
 
     Product.remoteMethod(
@@ -558,12 +607,11 @@ module.exports = function (Product) {
                 console.error('getProductDetail result err: ' + res.ErrorDescription);
                 cb({status: 0, msg: res.ErrorDescription});
               } else {
-                cb(null, {product: res.ItemData});
+                cb(null, res.ItemData);
               }
             });
           },
-          function (data, cb) {
-            var product = data.product;
+          function (product, cb) {
             if (product.Skus.length === 0) {
               cb({status: 9, msg: '该组合下不存在单品'});
               return;
@@ -583,8 +631,20 @@ module.exports = function (Product) {
                 cb({status:0, msg: res.ErrorInfo});
               } else {
                 product.single = JSON.parse(res.ResultStr);
-                cb(null, {status: 1, product:product, msg: ''});
+                cb(null, product);
               }
+            });
+          },
+          function (product, cb) {
+            productIFS.isFavoriteProduct(data, function (err, res) {
+              if (err) {
+                console.error('isFavoriteProduct err: ' + err);
+                cb({status:0, msg: '操作异常'});
+                return;
+              }
+
+              product.isLike = res;
+              cb(null, {status: 1, product:product, msg: ''});
             });
           }
         ],

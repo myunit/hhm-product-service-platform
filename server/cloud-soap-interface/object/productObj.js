@@ -237,3 +237,23 @@ exports.getCombinationSingleXML = function (obj) {
 
   return xml(xmlObj, true);
 };
+
+exports.isFavoriteProductXML = function (obj) {
+  var xmlObj = [{
+    IsFavorieItemByProductSysNo: [
+      {
+        _attr: {
+          xmlns: 'http://tempuri.org/'
+        }
+      },
+      {
+        customerNo: obj.userId
+      },
+      {
+        productSysNo: obj.productId
+      }
+    ]
+  }];
+
+  return xml(xmlObj, true);
+};
