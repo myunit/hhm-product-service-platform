@@ -340,36 +340,61 @@ module.exports = function (Product) {
     );
 
     //获取商品详情
-    Product.getProductDetail = function (data, cb) {
-      productIFS.getProductDetail(data, function (err, res) {
-        if (err) {
-          console.log('getProductDetail err: ' + err);
-          cb(null, {status: 0, msg: '操作异常'});
-          return;
-        }
-
-        if (!res.IsSuccess) {
-          console.error('getProductDetail result err: ' + res.ErrorDescription);
-          cb(null, {status: 0, msg: res.ErrorDescription});
-        } else {
-          var product = res.ItemData;
-          if (product.Skus.length > 1) {
-            var max = product.Skus[0].Price, min = max;
-            product.Skus.forEach(function (sItem, sIndex) {
-              if (sItem.Price > max) {
-                max = sItem.Price;
+    Product.getProductDetail = function (data, callback) {
+      async.waterfall(
+        [
+          function (cb) {
+            productIFS.getProductDetail(data, function (err, res) {
+              if (err) {
+                console.log('getProductDetail err: ' + err);
+                cb({status: 0, msg: '操作异常'});
+                return;
               }
 
-              if (sItem.Price < min) {
-                min = sItem.Price;
+              if (!res.IsSuccess) {
+                console.error('getProductDetail result err: ' + res.ErrorDescription);
+                cb({status: 0, msg: res.ErrorDescription});
+              } else {
+                var product = res.ItemData;
+                if (product.Skus.length > 1) {
+                  var max = product.Skus[0].Price, min = max;
+                  product.Skus.forEach(function (sItem, sIndex) {
+                    if (sItem.Price > max) {
+                      max = sItem.Price;
+                    }
+
+                    if (sItem.Price < min) {
+                      min = sItem.Price;
+                    }
+                  });
+                  product.MaxPrice = max;
+                  product.MinPrice = min;
+                }
+                cb(null, product);
               }
             });
-            product.MaxPrice = max;
-            product.MinPrice = min;
+          },
+          function (product, cb) {
+            productIFS.isFavoriteProduct(data, function (err, res) {
+              if (err) {
+                console.error('isFavoriteProduct err: ' + err);
+                cb({status:0, msg: '操作异常'});
+                return;
+              }
+
+              product.isLike = res;
+              cb(null, {status: 1, product:product, msg: ''});
+            });
           }
-          cb(null, {status: 1, product: product, msg: ''});
+        ],
+        function (err, msg) {
+          if (err) {
+            callback(null, err);
+          } else {
+            callback(null, msg);
+          }
         }
-      });
+      );
     };
 
     Product.remoteMethod(

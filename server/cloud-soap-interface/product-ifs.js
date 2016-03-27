@@ -142,3 +142,16 @@ ProductIFS.prototype.getCombinationSingle = function (obj, callback) {
     }
   });
 };
+
+ProductIFS.prototype.isFavoriteProduct = function (obj, callback) {
+  var Product = this.DS.models.Product;
+  var xml = productObj.isFavoriteProductXML(obj);
+  Product.IsFavorieItemByProductSysNo(xml, function (err, response) {
+    try {
+      callback(err, JSON.parse(response.IsFavorieItemByProductSysNoResult));
+    } catch (e) {
+      console.error('ProductIFS isFavoriteProduct Exception: ' + e);
+      callback(err, {IsSuccess: false, ErrorDescription:'服务异常'});
+    }
+  });
+};
