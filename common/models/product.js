@@ -277,7 +277,8 @@ module.exports = function (Product) {
             });
           },
           function (product, cb) {
-            productIFS.isFavoriteProduct(data, function (err, res) {
+            var obj = {userId: data.userId, productId:product.SysNo};
+            productIFS.isFavoriteProduct(obj, function (err, res) {
               if (err) {
                 console.error('isFavoriteProduct err: ' + err);
                 cb({status:0, msg: '操作异常'});
