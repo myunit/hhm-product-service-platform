@@ -272,7 +272,11 @@ module.exports = function (Product) {
                 console.error('getSecKillProductDetail result err: ' + res.ErrorInfo);
                 cb({status: 0, msg: res.ErrorInfo});
               } else {
-                cb(null, JSON.parse(res.ResultStr));
+                var product = JSON.parse(res.ResultStr);
+                product.Skus = product.Skus.filter(function (item) {
+                  return item.IsSeckillProduct;
+                });
+                cb(null, product);
               }
             });
           },
