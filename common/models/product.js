@@ -337,6 +337,9 @@ module.exports = function (Product) {
           cb(null, {status: 0, msg: res.ErrorInfo});
         } else {
           var recommend = JSON.parse(res.ResultStr);
+          if (recommend.length > 6) {
+            recommend.splice(6, recommend.length-6);
+          }
           recommend.forEach(function (item, index) {
             if (item.RecommendItems.length > 6) {
               item.RecommendItems.splice(6, item.RecommendItems.length-6);
@@ -472,6 +475,9 @@ module.exports = function (Product) {
           } else {
             var recommend = JSON.parse(res.ResultStr);
             home.recommend = recommend;
+            if (home.recommend.length > 6) {
+              home.recommend.splice(6, home.recommend.length-6);
+            }
             home.recommend.forEach(function (item, index) {
               if (item.RecommendItems.length > 6) {
                 item.RecommendItems.splice(6, item.RecommendItems.length-6);
