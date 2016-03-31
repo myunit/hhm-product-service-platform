@@ -98,7 +98,7 @@ ProductIFS.prototype.getRecommend = function (obj, callback) {
     try {
       callback(err, JSON.parse(response.GetAllColumnsRecommendResult));
     } catch (e) {
-      console.error('ProductIFS getRecommendProduct Exception: ' + e);
+      console.error('ProductIFS getRecommend Exception: ' + e);
       callback(err, {IsSuccess: false, ErrorDescription:'服务异常'});
     }
   });
