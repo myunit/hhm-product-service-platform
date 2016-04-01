@@ -2,55 +2,42 @@
   "hhm":{
     "banner":[
       {
-        "img": "http://img.alicdn.com/tps/i1/TB1M8ZOLVXXXXX8XpXXX3a8GpXX-700-500.jpg",
-        "url": "http://wxp.xitie10.com/product/new",
+        "img": "http://hhmimage.hhm168.com/homepage/5.jpg",
+        "url": "http://hhmapp.haohaimai.com/product/secKill",
         "type": 2,
         "code": 0
       },
       {
-        "img": "http://img.alicdn.com/tps/i1/TB11.gILVXXXXaQXpXXP3C8GpXX-700-500.png",
-        "url": "http://wxp.xitie10.com/product/secKill",
+        "img": "http://hhmimage.hhm168.com/homepage/6.jpg",
+        "url": "http://hhmapp.haohaimai.com/product/secKill",
         "type": 0,
         "code": 0
-      },
-      {
-        "img": "http://img.alicdn.com/tps/i1/TB1S3oNLVXXXXXSXpXXX3a8GpXX-700-500.jpg",
-        "url": "http://wxp.xitie10.com/product/group",
-        "type": 1,
-        "code": 0
-      },
-      {
-        "img": "http://img.alicdn.com/tps/i1/TB1S3oNLVXXXXXSXpXXX3a8GpXX-700-500.jpg",
-        "url": "http://wxp.xitie10.com/product/recommend?id=14&name=0323栏目一",
-        "type": 5,
-        "code": 14,
-        "name": "0323栏目一"
       }
     ],
     "news": {
-      "img": "http://haohaomai.oss-cn-hangzhou.aliyuncs.com/indexpics/home-xinpin.jpg",
-      "imgApp": "http://haohaomai.oss-cn-hangzhou.aliyuncs.com/indexpics/img_xinpin%403x.png",
+      "img": "http://hhmimage.hhm168.com/homepage/4.jpg",
+      "imgApp": "http://hhmimage.hhm168.com/homepage/4.jpg",
       "url": "",
       "type": 2,
       "code": 0
     },
     "sales": {
-      "img": "http://haohaomai.oss-cn-hangzhou.aliyuncs.com/indexpics/home-temai.jpg",
-      "imgApp": "http://haohaomai.oss-cn-hangzhou.aliyuncs.com/indexpics/img_temai%403x.png",
+      "img": "http://hhmimage.hhm168.com/homepage/2.jpg",
+      "imgApp": "http://hhmimage.hhm168.com/homepage/2.jpg",
       "url": "",
       "type": 3,
       "code": 0
     },
     "group": {
-      "img": "http://haohaomai.oss-cn-hangzhou.aliyuncs.com/indexpics/home-group.jpg",
-      "imgApp": "http://haohaomai.oss-cn-hangzhou.aliyuncs.com/indexpics/img_zuhe%403x.png",
+      "img": "http://hhmimage.hhm168.com/homepage/1.jpg ",
+      "imgApp": "http://hhmimage.hhm168.com/homepage/1.jpg",
       "url": "",
       "type": 1,
       "code": 0
     },
     "secKill": {
-      "img": "http://haohaomai.oss-cn-hangzhou.aliyuncs.com/indexpics/home-miaosha.jpg",
-      "imgApp": "http://haohaomai.oss-cn-hangzhou.aliyuncs.com/indexpics/img_miaosha%403x.png",
+      "img": "http://hhmimage.hhm168.com/homepage/3.jpg",
+      "imgApp": "http://hhmimage.hhm168.com/homepage/3.jpg",
       "url": "",
       "type": 0,
       "code": 0
