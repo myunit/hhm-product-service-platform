@@ -459,15 +459,19 @@ module.exports = function (Product) {
       if (home === undefined) {
         cb(null, {status: 0, msg: '配置不存在'});
       } else {
+        var start = (new Date()).getTime();
         productIFS.getRecommend({
           userId: data.userId,
           recommendId: 0
         }, function (err, res) {
+          var end = (new Date()).getTime();
           if (err) {
             console.log('getRecommendProduct err: ' + err);
             cb(null, {status: 0, msg: '操作异常'});
             return;
           }
+          var diff = end - start;
+          console.log('diff: ' + diff);
 
           if (!res.IsSuccess) {
             console.error('getRecommendProduct result err: ' + res.ErrorInfo);
@@ -475,15 +479,18 @@ module.exports = function (Product) {
           } else {
             var recommend = JSON.parse(res.ResultStr);
             home.recommend = recommend;
-            if (home.recommend.length > 6) {
+            /*if (home.recommend.length > 6) {
               home.recommend.splice(6, home.recommend.length-6);
-            }
+            }*/
             home.recommend.forEach(function (item, index) {
               if (item.RecommendItems.length > 6) {
                 item.RecommendItems.splice(6, item.RecommendItems.length-6);
               }
               item.type = 5;
             });
+            var end1 = (new Date()).getTime();
+            var diff1 = end1 - start;
+            console.log('diff: ' + diff1);
             cb(null, {status: 1, home: home, msg: ''});
           }
         });
