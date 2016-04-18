@@ -459,19 +459,15 @@ module.exports = function (Product) {
       if (home === undefined) {
         cb(null, {status: 0, msg: '配置不存在'});
       } else {
-        var start = (new Date()).getTime();
         productIFS.getRecommend({
           userId: data.userId,
           recommendId: 0
         }, function (err, res) {
-          var end = (new Date()).getTime();
           if (err) {
             console.log('getRecommendProduct err: ' + err);
             cb(null, {status: 0, msg: '操作异常'});
             return;
           }
-          var diff = end - start;
-          console.log('diff: ' + diff);
 
           if (!res.IsSuccess) {
             console.error('getRecommendProduct result err: ' + res.ErrorInfo);
