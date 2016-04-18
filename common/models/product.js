@@ -484,9 +484,6 @@ module.exports = function (Product) {
               }
               item.type = 5;
             });
-            var end1 = (new Date()).getTime();
-            var diff1 = end1 - start;
-            console.log('diff: ' + diff1);
             cb(null, {status: 1, home: home, msg: ''});
           }
         });
