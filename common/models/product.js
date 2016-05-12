@@ -400,7 +400,7 @@ module.exports = function (Product) {
           {
             arg: 'data', type: 'object', required: true, http: {source: 'body'},
             description: [
-              '获取推荐类目 {"userId":int, "carouselId":int}',
+              '获取轮播 {"userId":int, "carouselId":int}',
               'carouselId:轮播id, 可以不传'
             ]
           }
@@ -488,44 +488,83 @@ module.exports = function (Product) {
     );
 
     //获取首页配置信息
-    Product.getHomeConfig = function (data, cb) {
+    Product.getHomeConfig = function (data, callback) {
       if (!data.project) {
-        cb(null, {status: 0, msg: '参数错误'});
+        callback(null, {status: 0, msg: '参数错误'});
         return;
       }
 
       var home = homeConfig[data.project];
       if (home === undefined) {
-        cb(null, {status: 0, msg: '配置不存在'});
+        callback(null, {status: 0, msg: '配置不存在'});
       } else {
-        productIFS.getRecommend({
-          userId: data.userId,
-          recommendId: 0
-        }, function (err, res) {
-          if (err) {
-            console.log('getRecommendProduct err: ' + err);
-            cb(null, {status: 0, msg: '操作异常'});
-            return;
-          }
+        async.waterfall(
+          [
+            function (cb) {
+              productIFS.getRecommend({
+                userId: data.userId,
+                recommendId: 0
+              }, function (err, res) {
+                if (err) {
+                  console.log('getRecommendProduct err: ' + err);
+                  cb({status: 0, msg: '操作异常'});
+                  return;
+                }
 
-          if (!res.IsSuccess) {
-            console.error('getRecommendProduct result err: ' + res.ErrorInfo);
-            cb(null, {status: 0, msg: res.ErrorInfo});
-          } else {
-            var recommend = JSON.parse(res.ResultStr);
-            home.recommend = recommend;
-            /*if (home.recommend.length > 6) {
-              home.recommend.splice(6, home.recommend.length-6);
-            }*/
-            home.recommend.forEach(function (item, index) {
-              if (item.RecommendItems.length > 6) {
-                item.RecommendItems.splice(6, item.RecommendItems.length-6);
-              }
-              item.type = 5;
-            });
-            cb(null, {status: 1, home: home, msg: ''});
+                if (!res.IsSuccess) {
+                  console.error('getRecommendProduct result err: ' + res.ErrorInfo);
+                  cb(null, {status: 0, msg: res.ErrorInfo});
+                } else {
+                  var recommend = JSON.parse(res.ResultStr);
+                  home.recommend = recommend;
+                  /*if (home.recommend.length > 6) {
+                   home.recommend.splice(6, home.recommend.length-6);
+                   }*/
+                  home.recommend.forEach(function (item, index) {
+                    if (item.RecommendItems.length > 6) {
+                      item.RecommendItems.splice(6, item.RecommendItems.length-6);
+                    }
+                    item.type = 5;
+                  });
+                  cb(null, home);
+                }
+              });
+            },
+            function (home, cb) {
+              productIFS.getCarousel({
+                userId: data.userId,
+                carouselId: 0
+              }, function (err, res) {
+                if (err) {
+                  console.log('getCarousel err: ' + err);
+                  cb({status: 0, msg: '操作异常'});
+                  return;
+                }
+
+                if (!res.IsSuccess) {
+                  console.error('getCarousel result err: ' + res.ErrorInfo);
+                  cb({status: 0, msg: res.ErrorInfo});
+                } else {
+                  var carousel = JSON.parse(res.ResultStr);
+                  for (var i = 0; i < carousel.length; i++) {
+                    delete carousel[i].RecommendName;
+                    delete carousel[i].RecommendStatus;
+                    delete carousel[i].RecommendItems;
+                  }
+                  home.carousel = carousel;
+                  cb(null, {status: 1, home: home, msg: ''});
+                }
+              });
+            }
+          ],
+          function (err, msg) {
+            if (err) {
+              callback(null, err);
+            } else {
+              callback(null, msg);
+            }
           }
-        });
+        );
       }
 
     };

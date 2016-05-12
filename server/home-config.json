@@ -1,19 +1,5 @@
 {
   "hhm":{
-    "banner":[
-      {
-        "img": "http://hhmimage.hhm168.com/homepage/5.jpg",
-        "url": "http://hhmapp.haohaimai.com/product/secKill",
-        "type": 0,
-        "code": 0
-      },
-      {
-        "img": "http://hhmimage.hhm168.com/homepage/6.jpg",
-        "url": "http://hhmapp.haohaimai.com/product/secKill",
-        "type": 0,
-        "code": 0
-      }
-    ],
     "news": {
       "img": "http://hhmimage.hhm168.com/homepage/4.jpg",
       "imgApp": "http://hhmimage.hhm168.com/homepage/4_1.jpg?0407",
