@@ -355,7 +355,7 @@ module.exports = function (Product) {
       'getRecommend',
       {
         description: [
-          '获取推荐类目.返回结果-status:操作结果 0 失败 1 成功, count:总数, recommend:推荐信息, msg:附带信息'
+          '获取推荐类目.返回结果-status:操作结果 0 失败 1 成功, recommend:推荐信息, msg:附带信息'
         ],
         accepts: [
           {
@@ -368,6 +368,45 @@ module.exports = function (Product) {
         ],
         returns: {arg: 'repData', type: 'string'},
         http: {path: '/get-recommend', verb: 'post'}
+      }
+    );
+
+    //获取轮播
+    Product.getCarousel = function (data, cb) {
+      productIFS.getCarousel(data, function (err, res) {
+        if (err) {
+          console.log('getCarousel err: ' + err);
+          cb(null, {status: 0, msg: '操作异常'});
+          return;
+        }
+
+        if (!res.IsSuccess) {
+          console.error('getCarousel result err: ' + res.ErrorInfo);
+          cb(null, {status: 0, msg: res.ErrorInfo});
+        } else {
+          var carousel = JSON.parse(res.ResultStr);
+          cb(null, {status: 1, carousel: carousel, msg: ''});
+        }
+      });
+    };
+
+    Product.remoteMethod(
+      'getCarousel',
+      {
+        description: [
+          '获取轮播.返回结果-status:操作结果 0 失败 1 成功, carousel:轮播信息, msg:附带信息'
+        ],
+        accepts: [
+          {
+            arg: 'data', type: 'object', required: true, http: {source: 'body'},
+            description: [
+              '获取推荐类目 {"userId":int, "carouselId":int}',
+              'carouselId:轮播id, 可以不传'
+            ]
+          }
+        ],
+        returns: {arg: 'repData', type: 'string'},
+        http: {path: '/get-carousel', verb: 'post'}
       }
     );
 
