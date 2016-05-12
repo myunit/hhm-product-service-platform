@@ -187,7 +187,7 @@ exports.getCarouselXML = function (obj) {
         recName: ''
       },
       {
-        recStatus: 1
+        recStatus: 2
       }
     ]
   }];
