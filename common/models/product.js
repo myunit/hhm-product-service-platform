@@ -547,7 +547,6 @@ module.exports = function (Product) {
                 } else {
                   var carousel = JSON.parse(res.ResultStr);
                   for (var i = 0; i < carousel.length; i++) {
-                    delete carousel[i].RecommendName;
                     delete carousel[i].RecommendStatus;
                     delete carousel[i].RecommendItems;
                   }
