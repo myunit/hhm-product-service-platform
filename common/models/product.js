@@ -546,6 +546,9 @@ module.exports = function (Product) {
                   cb({status: 0, msg: res.ErrorInfo});
                 } else {
                   var carousel = JSON.parse(res.ResultStr);
+                  if (carousel.length > 5) {
+                    carousel.splice(5, carousel.length-5);
+                  }
                   for (var i = 0; i < carousel.length; i++) {
                     delete carousel[i].RecommendStatus;
                     delete carousel[i].RecommendItems;
