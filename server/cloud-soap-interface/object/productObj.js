@@ -169,6 +169,32 @@ exports.getRecommendXML = function (obj) {
   return xml(xmlObj, true);
 };
 
+exports.getCarouselXML = function (obj) {
+  var xmlObj = [{
+    GetAllCarouselPictureList: [
+      {
+        _attr: {
+          xmlns: 'http://tempuri.org/'
+        }
+      },
+      {
+        uId: obj.userId
+      },
+      {
+        recId: obj.carouselId || 0
+      },
+      {
+        recName: ''
+      },
+      {
+        recStatus: 2
+      }
+    ]
+  }];
+
+  return xml(xmlObj, true);
+};
+
 exports.getRecommendProductXML = function (obj) {
   var xmlObj = [{
     GetColumnsRecommendBySysNo: [

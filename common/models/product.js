@@ -355,7 +355,7 @@ module.exports = function (Product) {
       'getRecommend',
       {
         description: [
-          '获取推荐类目.返回结果-status:操作结果 0 失败 1 成功, count:总数, recommend:推荐信息, msg:附带信息'
+          '获取推荐类目.返回结果-status:操作结果 0 失败 1 成功, recommend:推荐信息, msg:附带信息'
         ],
         accepts: [
           {
@@ -368,6 +368,45 @@ module.exports = function (Product) {
         ],
         returns: {arg: 'repData', type: 'string'},
         http: {path: '/get-recommend', verb: 'post'}
+      }
+    );
+
+    //获取轮播
+    Product.getCarousel = function (data, cb) {
+      productIFS.getCarousel(data, function (err, res) {
+        if (err) {
+          console.log('getCarousel err: ' + err);
+          cb(null, {status: 0, msg: '操作异常'});
+          return;
+        }
+
+        if (!res.IsSuccess) {
+          console.error('getCarousel result err: ' + res.ErrorInfo);
+          cb(null, {status: 0, msg: res.ErrorInfo});
+        } else {
+          var carousel = JSON.parse(res.ResultStr);
+          cb(null, {status: 1, carousel: carousel, msg: ''});
+        }
+      });
+    };
+
+    Product.remoteMethod(
+      'getCarousel',
+      {
+        description: [
+          '获取轮播.返回结果-status:操作结果 0 失败 1 成功, carousel:轮播信息, msg:附带信息'
+        ],
+        accepts: [
+          {
+            arg: 'data', type: 'object', required: true, http: {source: 'body'},
+            description: [
+              '获取轮播 {"userId":int, "carouselId":int}',
+              'carouselId:轮播id, 可以不传'
+            ]
+          }
+        ],
+        returns: {arg: 'repData', type: 'string'},
+        http: {path: '/get-carousel', verb: 'post'}
       }
     );
 
@@ -449,44 +488,85 @@ module.exports = function (Product) {
     );
 
     //获取首页配置信息
-    Product.getHomeConfig = function (data, cb) {
+    Product.getHomeConfig = function (data, callback) {
       if (!data.project) {
-        cb(null, {status: 0, msg: '参数错误'});
+        callback(null, {status: 0, msg: '参数错误'});
         return;
       }
 
       var home = homeConfig[data.project];
       if (home === undefined) {
-        cb(null, {status: 0, msg: '配置不存在'});
+        callback(null, {status: 0, msg: '配置不存在'});
       } else {
-        productIFS.getRecommend({
-          userId: data.userId,
-          recommendId: 0
-        }, function (err, res) {
-          if (err) {
-            console.log('getRecommendProduct err: ' + err);
-            cb(null, {status: 0, msg: '操作异常'});
-            return;
-          }
+        async.waterfall(
+          [
+            function (cb) {
+              productIFS.getRecommend({
+                userId: data.userId,
+                recommendId: 0
+              }, function (err, res) {
+                if (err) {
+                  console.log('getRecommendProduct err: ' + err);
+                  cb({status: 0, msg: '操作异常'});
+                  return;
+                }
 
-          if (!res.IsSuccess) {
-            console.error('getRecommendProduct result err: ' + res.ErrorInfo);
-            cb(null, {status: 0, msg: res.ErrorInfo});
-          } else {
-            var recommend = JSON.parse(res.ResultStr);
-            home.recommend = recommend;
-            /*if (home.recommend.length > 6) {
-              home.recommend.splice(6, home.recommend.length-6);
-            }*/
-            home.recommend.forEach(function (item, index) {
-              if (item.RecommendItems.length > 6) {
-                item.RecommendItems.splice(6, item.RecommendItems.length-6);
-              }
-              item.type = 5;
-            });
-            cb(null, {status: 1, home: home, msg: ''});
+                if (!res.IsSuccess) {
+                  console.error('getRecommendProduct result err: ' + res.ErrorInfo);
+                  cb(null, {status: 0, msg: res.ErrorInfo});
+                } else {
+                  var recommend = JSON.parse(res.ResultStr);
+                  home.recommend = recommend;
+                  /*if (home.recommend.length > 6) {
+                   home.recommend.splice(6, home.recommend.length-6);
+                   }*/
+                  home.recommend.forEach(function (item, index) {
+                    if (item.RecommendItems.length > 6) {
+                      item.RecommendItems.splice(6, item.RecommendItems.length-6);
+                    }
+                    item.type = 5;
+                  });
+                  cb(null, home);
+                }
+              });
+            },
+            function (home, cb) {
+              productIFS.getCarousel({
+                userId: data.userId,
+                carouselId: 0
+              }, function (err, res) {
+                if (err) {
+                  console.log('getCarousel err: ' + err);
+                  cb({status: 0, msg: '操作异常'});
+                  return;
+                }
+
+                if (!res.IsSuccess) {
+                  console.error('getCarousel result err: ' + res.ErrorInfo);
+                  cb({status: 0, msg: res.ErrorInfo});
+                } else {
+                  var carousel = JSON.parse(res.ResultStr);
+                  if (carousel.length > 5) {
+                    carousel.splice(5, carousel.length-5);
+                  }
+                  for (var i = 0; i < carousel.length; i++) {
+                    delete carousel[i].RecommendStatus;
+                    delete carousel[i].RecommendItems;
+                  }
+                  home.carousel = carousel;
+                  cb(null, {status: 1, home: home, msg: ''});
+                }
+              });
+            }
+          ],
+          function (err, msg) {
+            if (err) {
+              callback(null, err);
+            } else {
+              callback(null, msg);
+            }
           }
-        });
+        );
       }
 
     };

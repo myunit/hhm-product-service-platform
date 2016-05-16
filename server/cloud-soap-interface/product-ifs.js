@@ -104,6 +104,19 @@ ProductIFS.prototype.getRecommend = function (obj, callback) {
   });
 };
 
+ProductIFS.prototype.getCarousel = function (obj, callback) {
+  var Product = this.DS.models.Product;
+  var xml = productObj.getCarouselXML(obj);
+  Product.GetAllCarouselPictureList(xml, function (err, response) {
+    try {
+      callback(err, JSON.parse(response.GetAllCarouselPictureListResult));
+    } catch (e) {
+      console.error('ProductIFS getCarousel Exception: ' + e);
+      callback(err, {IsSuccess: false, ErrorDescription:'服务异常'});
+    }
+  });
+};
+
 ProductIFS.prototype.getRecommendProduct = function (obj, callback) {
   var Product = this.DS.models.Product;
   var xml = productObj.getRecommendProductXML(obj);
