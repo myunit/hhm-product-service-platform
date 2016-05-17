@@ -97,7 +97,7 @@ module.exports = function (Product) {
           {
             arg: 'data', type: 'object', required: true, http: {source: 'body'},
             description: [
-              '获取分类下的商品 {"userId":int,"CId":int,"ChildCId":int,"pageId":int,"pageSize":int}',
+              '获取分类下的商品 {"userId":int,"CId":int,"ChildCId":int,"pageId":int,"pageSize":int, "pcdCode": "string"}',
               'CId:父类Id, ChildCId:子类Id'
             ]
           }
@@ -135,7 +135,7 @@ module.exports = function (Product) {
           {
             arg: 'data', type: 'object', required: true, http: {source: 'body'},
             description: [
-              '搜索商品 {"userId":int,"key":"string","pageId":int,"pageSize":int}'
+              '搜索商品 {"userId":int,"key":"string","pageId":int,"pageSize":int,  "pcdCode":"string"}'
             ]
           }
         ],
@@ -172,7 +172,7 @@ module.exports = function (Product) {
           {
             arg: 'data', type: 'object', required: true, http: {source: 'body'},
             description: [
-              '获取特卖商品 {"userId":int,"pageId":int,"pageSize":int}'
+              '获取特卖商品 {"userId":int,"pageId":int,"pageSize":int, "pcdCode":"string"}'
             ]
           }
         ],
@@ -209,7 +209,7 @@ module.exports = function (Product) {
           {
             arg: 'data', type: 'object', required: true, http: {source: 'body'},
             description: [
-              '获取新品商品 {"userId":int,"pageId":int,"pageSize":int}'
+              '获取新品商品 {"userId":int,"pageId":int,"pageSize":int, "pcdCode":"string"}'
             ]
           }
         ],
@@ -247,7 +247,7 @@ module.exports = function (Product) {
           {
             arg: 'data', type: 'object', required: true, http: {source: 'body'},
             description: [
-              '获取秒杀商品 {"userId":int}'
+              '获取秒杀商品 {"userId":int, "pcdCode":"string"}'
             ]
           }
         ],
@@ -579,7 +579,7 @@ module.exports = function (Product) {
           {
             arg: 'data', type: 'object', required: true, http: {source: 'body'},
             description: [
-              '获取首页配置信息 {"userId":int, "project":"string"}',
+              '获取首页配置信息 {"userId":int, "project":"string", "pcdCode": "string"}',
               'project:项目名, 好好卖是hhm'
             ]
           }
@@ -673,7 +673,7 @@ module.exports = function (Product) {
           {
             arg: 'data', type: 'object', required: true, http: {source: 'body'},
             description: [
-              '获取组合商品 {"userId":int,"pageId":int,"pageSize":int}'
+              '获取组合商品 {"userId":int,"pageId":int,"pageSize":int, "pcdCode":"string"}'
             ]
           }
         ],

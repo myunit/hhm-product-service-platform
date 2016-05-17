@@ -27,6 +27,9 @@ exports.getSecKillProductXML = function (obj) {
       },
       {
         skuCode: ''
+      },
+      {
+        PCDCode: obj.pcdCode
       }
     ]
   }];

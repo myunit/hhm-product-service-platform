@@ -31,6 +31,7 @@ exports.getCategoryProductXML = function (obj) {
   request.priceFrom = -1;
   request.priceTo = -1;
   request.UId = obj.userId;
+  request.PCDCode = obj.pcdCode;
   var xmlObj = [{
     ItemForList: [
       {
@@ -66,6 +67,9 @@ exports.searchProductXML = function (obj) {
       },
       {
         pageSize: obj.pageSize
+      },
+      {
+        PCDCode: obj.pcdCode
       }
     ]
   }];
@@ -92,6 +96,9 @@ exports.getSalesProductXML = function (obj) {
       },
       {
         pageSize: obj.pageSize
+      },
+      {
+        PCDCode: obj.pcdCode
       }
     ]
   }];
@@ -107,6 +114,7 @@ exports.getNewProductXML = function (obj) {
   request.priceTo = -1;
   request.UId = obj.userId;
   request.SearchType = 1;
+  request.PCDCode = obj.pcdCode;
   var xmlObj = [{
     ItemForList: [
       {
@@ -162,6 +170,9 @@ exports.getRecommendXML = function (obj) {
       },
       {
         recStatus: 2
+      },
+      {
+        PCDCode: obj.pcdCode
       }
     ]
   }];
@@ -188,6 +199,9 @@ exports.getCarouselXML = function (obj) {
       },
       {
         recStatus: 2
+      },
+      {
+        PCDCode: obj.pcdCode
       }
     ]
   }];
@@ -231,6 +245,7 @@ exports.getGroupProductXML = function (obj) {
   request.priceTo = -1;
   request.UId = obj.userId;
   request.isCombineProduct = true;
+  request.PCDCode = obj.pcdCode;
   var xmlObj = [{
     ItemForList: [
       {
